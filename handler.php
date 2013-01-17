@@ -1,9 +1,15 @@
 <?php
 
 ################################################################################
-# The parent directory of the manga directory. 
-# Combined with the directory name in index.php, 
+# Set $path with the full path of the parent directory of the manga directory. 
+#
+# Combined with $dir_name in index.php, 
 # the manga directory's full path will be /volume1/manga.
+#
+# For example, if your manga directory is /comix/manga/content, 
+# set $path = "/comix/manga" in this file and 
+# set $dir_name = "content" in index.php. 
+# You also need to change "manga" to "content" in httpd.conf-comix. 
 ################################################################################
 $path = "/volume1";
 
