@@ -23,7 +23,8 @@ How to install
 How to use
 ==========
 - Copy your manga collection to the manga directory.
-- Start AirComix App and add Synology server. Use the default port, 31251.
+- Start AirComix app and add your Synology server. 
+  Use the default port, 31251.
 - Enjoy!
 
 
@@ -41,11 +42,15 @@ Q) How can I change the manga directory?
 A) See handler.php. You need to modify handler.php, index.php, and
    httpd.conf-comix.
 
-Q) Does the server support password protection?
-A) No, current version does not support any authentication mechanism.
-   We strongly recommend you run run the comix server in a private network.
-   If you run the server on a public network, anybody can see the content.
-
 Q) Does the server support other archive formats such as RAR or CBR?
 A) No. Current version only supports ZIP (or CBZ).
+
+Q) Does the server support password protection?
+A) Yes, using Apache's basic authentication mechanism. Refer to
+   http://www.cs.duke.edu/csl/faqs/web/basic-auth to know how to
+   configure it. Note that the userid should be AirComix (case
+   sensitve) and .htaccess file should be /var/services/web where
+   handler.php exists. If there is no htpasswd in your system, you can
+   create the password file on other Linux/OSX machines and copy it to
+   your system.
 

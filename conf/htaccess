@@ -1,0 +1,5 @@
+AuthType Basic
+AuthName "AirComix"
+AuthUserFile /var/services/.htpasswd
+require valid-user
+
