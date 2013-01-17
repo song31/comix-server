@@ -1,17 +1,19 @@
 <?php
 
 ################################################################################
-# Set $path with the full path of the parent directory of the manga directory. 
+# Set $parent_path with the full path of the parent directory of 
+# the manga directory. 
 #
 # Combined with $dir_name in index.php, 
 # the manga directory's full path will be /volume1/manga.
 #
-# For example, if your manga directory is /comix/manga/content, 
-# set $path = "/comix/manga" in this file and 
+# For example, if your manga directory is /home/comix/content, 
+# set $parent_path = "/home/comix" in this file and 
 # set $dir_name = "content" in index.php. 
-# You also need to change "manga" to "content" in httpd.conf-comix. 
+# You also need to change "manga" to "content" in AliasMatch 
+# directive in httpd.conf-comix. 
 ################################################################################
-$path = "/volume1";
+$parent_path = "/volume1";
 
 
 $is_debug = false;
@@ -30,7 +32,7 @@ $request_path = parse_url($request_uri, PHP_URL_PATH);
 $request_path = urldecode($request_path);
 debug("request_path: ".$request_path);
 
-$path .= $request_path;
+$path = $parent_path.$request_path;
 debug("path: ".$path);
 
 if (is_dir($path)) {
@@ -275,10 +277,10 @@ function parse_real_path($path, $ext) {
 function change_encoding($name) {
     global $source_encoding, $target_encoding;
     $tmp = iconv($source_encoding, $source_encoding, $name);
-    if ($tmp == "") {
-        return $name;
-    } else {
+    if (strlen($tmp) == strlen($name)) {
         return iconv($source_encoding, $target_encoding, $name);
+    } else {
+        return $name;
     }
 }
 
