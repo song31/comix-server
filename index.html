@@ -11,23 +11,6 @@
     <title>Comix-server</title>
   </head>
 
-  <!-- Google analytics tracking -->
-  <script type="text/javascript">
-
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-37763383-1']);
-      _gaq.push(['_setDomainName', 'github.com']);
-      _gaq.push(['_setAllowLinker', true]);
-      _gaq.push(['_trackPageview']);
-
-      (function() {
-       var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-       ga.src = ('https:' == document.location.protocol ?  'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-       var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-       })();
-
-  </script>
-
   <body>
 
     <!-- HEADER -->
@@ -117,22 +100,7 @@ A) Yes, using Apache's basic authentication mechanism. Refer to
 
 <h2>How to contribute</h2>
 
-<p>But reports and pull requests are always welcomed.
-You can also donate money throug PayPal if you want. 
-<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
-    <input type="hidden" name="cmd" value="_s-xclick">
-    <input type="hidden" name="hosted_button_id"
-    value="SJ9S3KHZRC3KE">
-    <input type="image"
-    src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif"
-    border="0" name="submit" alt="PayPal - The safer, easier way to
-    pay online!">
-    <img alt="" border="0"
-    src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif"
-    width="1" height="1">
-</form>
-</p>
-
+<p>But reports and pull requests are always welcomed.</p>
       </section>
     </div>
 
@@ -144,7 +112,17 @@ You can also donate money throug PayPal if you want.
       </footer>
     </div>
 
-    
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-37763383-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
 
   </body>
 </html>
