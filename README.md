@@ -32,7 +32,7 @@ In short,
 
 ## How to run
 
-The Apache HTTP process automatically starts and is always running on the Synlogy server.
+The Apache HTTP process automatically starts and is always running on the Synology server.
 
 
 ## How to use
