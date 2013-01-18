@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Comix-server : PHP-based AirComix Server" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Comix-server</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/song31/comix-server">View on GitHub</a>
+
+          <h1 id="project_title">Comix-server</h1>
+          <h2 id="project_tagline">PHP-based AirComix Server</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/song31/comix-server/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/song31/comix-server/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <p>Comix-server is a PHP-based AirComix Server acting just as the Windows
+version.  Originally it was made to run on the Synology NAS.  However,
+it can run on any platform where Apache HTTP Server exists, such as
+Ubuntu Linux or OSX.</p>
+
+<h2>How to download</h2>
+
+<p>Go to <a href="http://song31.github.com/comix-server/">http://song31.github.com/comix-server/</a> and click the tar.gz or
+zip folder icon in the page.</p>
+
+<h2>How to install</h2>
+
+<p>You can find a step-by-step guide from
+<a href="https://github.com/song31/comix-server/wiki/Step-by-Step-Configuration-Guide">https://github.com/song31/comix-server/wiki/Step-by-Step-Configuration-Guide</a>  </p>
+
+<p>In short:</p>
+
+<ul>
+<li>Log in Synology DSM and make a shared folder, for example, named
+as "manga". This directory will be your manga directory.</li>
+<li>Enable ssh.</li>
+<li>Unzip the downloaded file and copy all to "web" folder (/var/services/web, default DocumentRoot).</li>
+<li>Connect to Synology server using ssh and do the remaining steps.</li>
+<li>Copy conf/httpd.conf-comix to /usr/syno/apache/conf/.</li>
+<li>Add the following line, "Include /usr/syno/apache/conf/httpd.conf-comix", 
+without quotes, at the end of /usr/syno/apache/conf/httpd.conf and 
+/usr/syno/apache/conf/httpd.conf-user files. </li>
+<li>Add the manga directory's path to the open_basedir variable in
+/usr/syno/etc/php/user-setting.ini.</li>
+<li>Reboot Synology server.</li>
+</ul><h2>How to run</h2>
+
+<p>The Apache process automatically starts and is always running on Synlogy server.  </p>
+
+<h2>How to use</h2>
+
+<ul>
+<li>Copy your manga collection to the manga directory.</li>
+<li>Start AirComix app and add your Synology server. 
+Use the default port, 31251.</li>
+<li>Enjoy!</li>
+</ul><h2>FAQ</h2>
+
+<p>Q) Do I need to uncompress ZIP files?<br>
+A) No. Like the Windows version, the server supports ZIP files.
+   Of course, you can copy image files in JPG or GIF format to the
+   manga directory.</p>
+
+<p>Q) How can I change the port number?<br>
+A) See /usr/syno/apache/conf/httpd.conf-comix.</p>
+
+<p>Q) How can I change the manga directory?<br>
+A) See handler.php. You need to modify handler.php, index.php, and
+   httpd.conf-comix.</p>
+
+<p>Q) Does the server support other archive formats such as RAR or CBR?<br>
+A) No. Current version only supports ZIP (or CBZ).</p>
+
+<p>Q) Does the server support password protection?<br>
+A) Yes, using Apache's basic authentication mechanism. Refer to
+   <a href="http://www.cs.duke.edu/csl/faqs/web/basic-auth">http://www.cs.duke.edu/csl/faqs/web/basic-auth</a> to know how to
+   configure it. Note that the user name should be AirComix (case
+   sensitve) and .htaccess file should be in /var/services/web where
+   handler.php exists. If there is no htpasswd util in your system, you can
+   create the password file on other Linux/OSX machines and copy it to
+   your system.</p>
+
+<h2>How to contribute</h2>
+
+<p>But reports and pull requests are always welcomed.</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Comix-server maintained by <a href="https://github.com/song31">song31</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
