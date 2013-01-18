@@ -5,6 +5,12 @@ However, the server can run on any platform where Apache HTTP Server
 exists because it only uses PHP and Apache HTTP server's configuration.
 
 
+How to download 
+===============
+- Go to http://song31.github.com/comix-server/ and click the tar.gz or
+  zip folder icon in the page.
+
+
 How to install
 ==============
 - Log in the Synology DSM and make a shared folder, for example, named
@@ -19,6 +25,8 @@ How to install
   /usr/syno/etc/php/user-setting.ini.
 - Reboot Synology server.
 
+You can also find a step-by-step guide from https://github.com/song31/comix-server/wiki/Step-by-Step-Configuration-Guide 
+
 
 How to use
 ==========
@@ -26,6 +34,7 @@ How to use
 - Start AirComix app and add your Synology server. 
   Use the default port, 31251.
 - Enjoy!
+
 
 
 FAQ
@@ -48,9 +57,9 @@ A) No. Current version only supports ZIP (or CBZ).
 Q) Does the server support password protection?
 A) Yes, using Apache's basic authentication mechanism. Refer to
    http://www.cs.duke.edu/csl/faqs/web/basic-auth to know how to
-   configure it. Note that the userid should be AirComix (case
-   sensitve) and .htaccess file should be /var/services/web where
-   handler.php exists. If there is no htpasswd in your system, you can
+   configure it. Note that the user name should be AirComix (case
+   sensitve) and .htaccess file should be in /var/services/web where
+   handler.php exists. If there is no htpasswd util in your system, you can
    create the password file on other Linux/OSX machines and copy it to
    your system.
 
