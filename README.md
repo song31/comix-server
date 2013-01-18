@@ -71,5 +71,5 @@ A) Yes, using Apache's basic authentication mechanism. Refer to
 
 ## How to contribute
 
-Bug reports and pull requests are always welcomed.
+Bug reports and pull requests are always welcome.
 
