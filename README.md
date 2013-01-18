@@ -27,6 +27,7 @@ In short,
   /usr/syno/apache/conf/httpd.conf-user. 
 - Add the manga directory's path to the open_basedir variable in
   /usr/syno/etc/php/user-setting.ini.
+- You might need to modify files to set up your manga directory. See handler.php for details. 
 - Reboot the Synology server.
 
 
