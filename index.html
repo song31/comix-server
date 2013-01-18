@@ -39,82 +39,66 @@ Ubuntu Linux or OSX.</p>
 <h2>How to download</h2>
 
 <p>Go to <a href="http://song31.github.com/comix-server/">http://song31.github.com/comix-server/</a> and click the tar.gz or
-zip folder icon in the page.</p>
+zip folder icons in the page.</p>
 
 <h2>How to install</h2>
 
 <p>You can find a step-by-step guide at 
 <a href="https://github.com/song31/comix-server/wiki/Step-by-Step-Configuration-Guide">https://github.com/song31/comix-server/wiki/Step-by-Step-Configuration-Guide</a>  </p>
 
-<p>In short:</p>
+<p>In short,</p>
 
 <ul>
-<li>Log in Synology DSM and make a shared folder, for example, named
-as "manga". This directory will be your manga directory.</li>
-<li>Enable ssh.</li>
-<li>Unzip the downloaded file and copy all to "web" folder (/var/services/web, default DocumentRoot).</li>
-<li>Connect to Synology server using ssh and do the remaining steps.</li>
+<li>Log in to the Synology DSM and make a shared folder, for example, named
+"manga". This directory will be your manga directory.</li>
+<li>Enable SSH.</li>
+<li>Unzip the downloaded file and copy all to the "web" folder (/var/services/web, default DocumentRoot).</li>
+<li>Connect to your Synology server using SSH and do the remaining steps.</li>
 <li>Copy conf/httpd.conf-comix to /usr/syno/apache/conf/.</li>
 <li>Add the following line, "Include /usr/syno/apache/conf/httpd.conf-comix", 
-without quotes, at the end of /usr/syno/apache/conf/httpd.conf and 
-/usr/syno/apache/conf/httpd.conf-user files. </li>
+without quotes of course, at the end of /usr/syno/apache/conf/httpd.conf and 
+/usr/syno/apache/conf/httpd.conf-user. </li>
 <li>Add the manga directory's path to the open_basedir variable in
 /usr/syno/etc/php/user-setting.ini.</li>
-<li>Reboot Synology server.</li>
+<li>Reboot the Synology server.</li>
 </ul><h2>How to run</h2>
 
-<p>The Apache process automatically starts and is always running on Synlogy server.</p>
+<p>The Apache HTTP process automatically starts and is always running on the Synlogy server.</p>
 
 <h2>How to use</h2>
 
 <ul>
 <li>Copy your comic collection to the manga directory.</li>
-<li>Start AirComix app and add your Synology server. 
-Use the default port, 31251.</li>
+<li>Start AirComix app on your iPhone/iPad and add your Synology server. 
+Use the default port number, 31251.</li>
 <li>Enjoy!</li>
 </ul><h2>FAQ</h2>
 
 <p>Q) Do I need to uncompress ZIP files?<br>
-A) No. Like the Windows version, the server supports ZIP files.
-   Of course, you can put image files in JPG or GIF format to the
-   manga directory.</p>
+A) No. Like Windows version, comix-server supports ZIP files.</p>
 
 <p>Q) How can I change the port number?<br>
 A) See /usr/syno/apache/conf/httpd.conf-comix.</p>
 
 <p>Q) How can I change the manga directory?<br>
-A) See handler.php. You need to modify handler.php, index.php, and
-   httpd.conf-comix.</p>
+A) See handler.php. You need to modify handler.php, index.php, user-setting.ini, 
+   and httpd.conf-comix.</p>
 
-<p>Q) Does the server support other archive formats such as RAR or CBR?<br>
+<p>Q) Does comix-server support other archive formats such as RAR or CBR?<br>
 A) No. Current version only supports ZIP (or CBZ).</p>
 
-<p>Q) Does the server support password protection?<br>
+<p>Q) Does comix-server support password protection?<br>
 A) Yes, using Apache's basic authentication mechanism. Refer to
    <a href="http://www.cs.duke.edu/csl/faqs/web/basic-auth">http://www.cs.duke.edu/csl/faqs/web/basic-auth</a> to know how to
    configure it. Note that the user name should be AirComix (case
    sensitve) and .htaccess file should be in /var/services/web where
    handler.php exists. If there is no htpasswd util in your system, you can
-   create the password file on other Linux/OSX machines and copy it to
+   create the password file on other machines and copy it to
    your system.</p>
 
 <h2>How to contribute</h2>
 
-<p>But reports and pull requests are always welcomed.
-You can also donate money through PayPal if you want.
-<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
-    <input type="hidden" name="cmd" value="_s-xclick">
-    <input type="hidden" name="hosted_button_id"
-    value="SJ9S3KHZRC3KE">
-    <input type="image"
-    src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif"
-    border="0" name="submit" alt="PayPal - The safer, easier way to
-    pay online!">
-    <img alt="" border="0"
-    src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif"
-    width="1" height="1">
-</form>  
-</p>
+<p>Bug reports and pull requests are always welcomed.</p>
       </section>
     </div>
 
