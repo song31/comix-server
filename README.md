@@ -1,18 +1,17 @@
-PHP-based AirComix Server
-
-This document assumes that the comix server runs on a Synology NAS.
-However, the server can run on any platform where Apache HTTP Server
-exists because it only uses PHP and Apache HTTP server's configuration.
-
-
-How to download 
-===============
-- Go to http://song31.github.com/comix-server/ and click the tar.gz or
-  zip folder icon in the page.
+Comix-server is a PHP-based AirComix Server acting just as the Windows
+version.  Originally it was made to run on the Synology NAS.  However,
+it can run on any platform where Apache HTTP Server exists such as
+Ubuntu Linux or OSX.
 
 
-How to install
-==============
+## How to download 
+
+Go to http://song31.github.com/comix-server/ and click the tar.gz or
+zip folder icon in the page.
+
+
+## How to install
+
 - Log in the Synology DSM and make a shared folder, for example, named
   as "manga". This directory will be your manga directory.
 - Enable ssh.
@@ -25,20 +24,20 @@ How to install
   /usr/syno/etc/php/user-setting.ini.
 - Reboot Synology server.
 
-You can also find a step-by-step guide from https://github.com/song31/comix-server/wiki/Step-by-Step-Configuration-Guide 
+You can find a step-by-step guide from
+https://github.com/song31/comix-server/wiki/Step-by-Step-Configuration-Guide 
 
 
-How to use
-==========
+## How to use
+
 - Copy your manga collection to the manga directory.
 - Start AirComix app and add your Synology server. 
   Use the default port, 31251.
 - Enjoy!
 
 
+## FAQ
 
-FAQ
-===
 Q) Do I need to uncompress ZIP files?
 A) No. Like the Windows version, the server supports ZIP files.
    Of course, you can copy image files such as JPG and GIF to the
@@ -62,4 +61,8 @@ A) Yes, using Apache's basic authentication mechanism. Refer to
    handler.php exists. If there is no htpasswd util in your system, you can
    create the password file on other Linux/OSX machines and copy it to
    your system.
+
+## How to contribute
+
+But reports and pull requests are always welcomed.
 
