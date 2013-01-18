@@ -7,11 +7,12 @@
 # Combined with $dir_name in index.php, 
 # the manga directory's full path will be /volume1/manga.
 #
-# For example, if your manga directory is /home/comix/content, 
-# set $parent_path = "/home/comix" in this file and 
-# set $dir_name = "content" in index.php. 
-# You also need to change "manga" to "content" in AliasMatch 
-# directive in httpd.conf-comix. 
+# For example, if your manga directory is /home/comix/content,
+# set $parent_path = "/home/comix" in handler.php,
+# set $dir_name = "content" in index.php, and
+# add /home/comix/content to open_base_dir in user-setting.ini.
+# You also need to change "manga" to "content" in AliasMatch
+# directive in httpd.conf-comix.
 ################################################################################
 $parent_path = "/volume1";
 
