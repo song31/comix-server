@@ -3,8 +3,8 @@ version. Originally it was made to run on the Synology NAS. However,
 it can run on any platforms where Apache HTTP Server runs, such as
 Ubuntu Linux or OSX.
 
-Comix-server only works with the AirComi*x* app. 
-Similarly named AirComi*cs* app does not work with comix-server. 
+Comix-server only works with the AirComix app. 
+Similarly named AirComics app does not work with comix-server. 
 
 ## How to download
 
