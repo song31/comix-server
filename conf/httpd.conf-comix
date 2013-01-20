@@ -1,6 +1,7 @@
 Listen 31251
 <VirtualHost *:31251>
   DocumentRoot "/var/services/web"
+  AllowEncodedSlashes On
   DirectoryIndex index.php
   AliasMatch ^/welcome.102(.*)$ /var/services/web/welcome.php
   AliasMatch ^/manga(.*)$ /var/services/web/handler.php
