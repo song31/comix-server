@@ -98,6 +98,12 @@ function process_image($file_path, $type) {
 ################################################################################
 function process_zip($file_path) {
     debug("process_zip: ".$file_path);
+    
+    if (end_with($file_path, "/")) {
+        $file_path = substr($file_path, 0, -1);
+        debug("process_zip: ".$file_path);
+    }
+    
     $zip_handle = zip_open($file_path) or die("can't open $file_path: $php_errormsg");
 
     while ($entry = zip_read($zip_handle)) {
