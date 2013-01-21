@@ -154,16 +154,33 @@ function process_file_in_zip($file_path, $type) {
     debug("process_file_in_zip: ".$file_path." type: ".$type);
 
     $zip_file_path = $path_parts['dirname'];
-	$subfolder_path="";
     $image_file_name = $path_parts['basename'];
-    if (!end_with($zip_file_path, ".zip")){ 
+    if (!end_with($zip_file_path, ".zip")) {
         $zip_file_path = parse_real_path($zip_file_path, ".zip");
-        $subfolder_path = str_replace($zip_file_path."/","",$path_parts['dirname'])."/";
     }
-    debug("zip_file_path:".$zip_file_path.", subfolder_path:".$subfolder_path.", image_file_name:".$image_file_name);
-    debug($subfolder_path.$image_file_name);
-	$zip = new ZipArchive;
-    if($zip->open($zip_file_path)==TRUE)echo $zip->getFromName(iconv("UTF-8","EUC-KR",  $subfolder_path.$image_file_name));
+    debug("zip_file_path: ".$zip_file_path);
+    debug("image_file_name: ".$image_file_name);
+
+    $zip_handle = zip_open($zip_file_path) or die("can't open $zip_file_path: $p
+hp_errormsg");
+    while ($entry = zip_read($zip_handle)) {
+        $entry_name = zip_entry_name($entry);
+        $entry_name = change_encoding($entry_name);
+        $entry_size = zip_entry_filesize($entry);
+
+        if ($entry_size > 0) {
+            if (end_with($entry_name, $image_file_name)) {
+                debug("entry_name: ".$entry_name);                
+                if (zip_entry_open($zip_handle, $entry)) {
+                    if (!$is_debug) {
+                        header("Content-Type: ".$type);
+                        header("Content-Length: ".$entry_size);
+                        echo zip_entry_read($entry, $entry_size);
+                    }
+                }
+            }
+        }
+    }
     zip_close($zip_handle);
 }
 
