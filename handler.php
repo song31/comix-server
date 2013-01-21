@@ -45,9 +45,9 @@ if (is_dir($path)) {
 
     if (is_in_zip($path, $ext)) {
         process_file_in_zip($path, $type);
-    } else if(is_in_rar($path,$ext)) {
-         process_file_in_rar($path, $type);
-     }else {
+    } else if (is_in_rar($path,$ext)) {
+        process_file_in_rar($path, $type);
+    } else {
         if (in_array($ext, $image_ext)) {
             process_image($path, $type);
         } else if ($ext == "zip") {
@@ -127,13 +127,13 @@ function process_zip($file_path) {
 # TODO: testing
 ################################################################################
 function process_rar($file_path) {
-	if (end_with($file_path, "/")) {
+    if (end_with($file_path, "/")) {
         $file_path = substr($file_path, 0, -1);
         debug("process_rar: ".$file_path);
     }
 
     $arch = RarArchive::open($file_path);
-	$entries = $arch->getEntries();
+    $entries = $arch->getEntries();
 
     debug(count($entries));
     for ($i = 0; $i < count($entries); $i++) {
@@ -210,6 +210,7 @@ function process_file_in_rar($file_path, $type) {
     }
     fclose($fp);
 }
+
 ################################################################################
 # Return true if file or directory name is valid.  
 # Valid means:
@@ -266,6 +267,7 @@ function is_in_zip($file_path, $ext) {
         }
     }
 }
+
 ################################################################################
 # Return true if the file is in a rar file
 ################################################################################
@@ -281,6 +283,7 @@ function is_in_rar($file_path, $ext) {
         }
     }
 }
+
 ################################################################################
 # Return content type from file extension
 ################################################################################
