@@ -45,7 +45,9 @@ if (is_dir($path)) {
 
     if (is_in_zip($path, $ext)) {
         process_file_in_zip($path, $type);
-    } else {
+    } else if(is_in_rar($path,$ext)) {
+         process_file_in_rar($path, $type);
+     }else {
         if (in_array($ext, $image_ext)) {
             process_image($path, $type);
         } else if ($ext == "zip") {
@@ -98,14 +100,14 @@ function process_image($file_path, $type) {
 ################################################################################
 function process_zip($file_path) {
     debug("process_zip: ".$file_path);
-    
+
     if (end_with($file_path, "/")) {
         $file_path = substr($file_path, 0, -1);
         debug("process_zip: ".$file_path);
     }
-    
-    $zip_handle = zip_open($file_path) or die("can't open $file_path: $php_errormsg");
 
+    $zip_handle = zip_open($file_path) or die("can't open $file_path: $php_errormsg");
+    
     while ($entry = zip_read($zip_handle)) {
         $entry_name = zip_entry_name($entry);
         $entry_name = change_encoding($entry_name);
@@ -125,9 +127,13 @@ function process_zip($file_path) {
 # TODO: testing
 ################################################################################
 function process_rar($file_path) {
-    debug("process_rar: ".$file_path);
+	if (end_with($file_path, "/")) {
+        $file_path = substr($file_path, 0, -1);
+        debug("process_rar: ".$file_path);
+    }
+
     $arch = RarArchive::open($file_path);
-    $entries = $arch->getEntries();
+	$entries = $arch->getEntries();
 
     debug(count($entries));
     for ($i = 0; $i < count($entries); $i++) {
@@ -148,36 +154,45 @@ function process_file_in_zip($file_path, $type) {
     debug("process_file_in_zip: ".$file_path." type: ".$type);
 
     $zip_file_path = $path_parts['dirname'];
+	$subfolder_path="";
     $image_file_name = $path_parts['basename'];
-    if (!end_with($zip_file_path, ".zip")) {
+    if (!end_with($zip_file_path, ".zip")){ 
         $zip_file_path = parse_real_path($zip_file_path, ".zip");
+        $subfolder_path = str_replace($zip_file_path."/","",$path_parts['dirname'])."/";
     }
-    debug("zip_file_path: ".$zip_file_path);
-    debug("image_file_name: ".$image_file_name);
-
-    $zip_handle = zip_open($zip_file_path) or die("can't open $zip_file_path: $php_errormsg");
-    while ($entry = zip_read($zip_handle)) {
-        $entry_name = zip_entry_name($entry);
-        $entry_name = change_encoding($entry_name);
-        $entry_size = zip_entry_filesize($entry);
-
-        if ($entry_size > 0) {
-            if (end_with($entry_name, $image_file_name)) {
-                debug("entry_name: ".$entry_name);
-                if (zip_entry_open($zip_handle, $entry)) {
-                    if (!$is_debug) {
-                        header("Content-Type: ".$type);
-                        header("Content-Length: ".$entry_size);
-                        echo zip_entry_read($entry, $entry_size);
-                    }
-                }
-            }
-        }
-    }
+    debug("zip_file_path:".$zip_file_path.", subfolder_path:".$subfolder_path.", image_file_name:".$image_file_name);
+    debug($subfolder_path.$image_file_name);
+	$zip = new ZipArchive;
+    if($zip->open($zip_file_path)==TRUE)echo $zip->getFromName(iconv("UTF-8","EUC-KR",  $subfolder_path.$image_file_name));
     zip_close($zip_handle);
 }
 
-
+################################################################################
+# Return image content in the rar file
+################################################################################
+function process_file_in_rar($file_path, $type) {
+    global $path_parts, $is_debug;
+    debug("process_file_in_rar: ".$file_path." type: ".$type);
+    $rar_file_path = $path_parts['dirname'];
+    $subfolder_path="";
+    $image_file_name = $path_parts['basename'];
+    if (!end_with($rar_file_path, ".rar")) {
+        $rar_file_path = parse_real_path($rar_file_path, ".rar");
+        $subfolder_path = str_replace($rar_file_path."/","",$path_parts['dirname'])."/";
+    }
+    debug("rar_file_path: ".$rar_file_path."subfolder_path:".$subfolder_path.", image_file_name: ".$image_file_name);
+    debug("file path :".$subfolder_path.$image_file_name);
+    $rar_handle = RarArchive::open($rar_file_path);
+    $entry = rar_entry_get($rar_handle, $subfolder_path.$image_file_name);
+    $fp = $entry->getStream();
+    rar_close($rar_handle);
+    while (!feof($fp)) {
+        $buff = fread($fp, 8192);
+        if ($buff !== false) echo $buff;
+        else break;
+    }
+    fclose($fp);
+}
 ################################################################################
 # Return true if file or directory name is valid.  
 # Valid means:
@@ -234,7 +249,21 @@ function is_in_zip($file_path, $ext) {
         }
     }
 }
-
+################################################################################
+# Return true if the file is in a rar file
+################################################################################
+function is_in_rar($file_path, $ext) {
+    $ret = strpos($file_path, ".rar");
+    if ($ret == false) {
+        return false;
+    } else {
+        if ($ext == "rar") {
+            return false;
+        } else {
+            return true;
+        }
+    }
+}
 ################################################################################
 # Return content type from file extension
 ################################################################################
@@ -275,7 +304,7 @@ function end_with($haystack,$needle,$case=true) {
 # Cut off the path after extension
 ################################################################################
 function parse_real_path($path, $ext) {
-    return substr($path, 0, strpos($path, "$ext")).$ext;
+    return substr($path, 0, strrpos($path, "$ext")).$ext;
 }
 
 ################################################################################
