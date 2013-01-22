@@ -101,12 +101,14 @@ function process_image($file_path, $type) {
 function process_zip($file_path) {
     debug("process_zip: ".$file_path);
 
+    # to support aicromics, the new client app
     if (end_with($file_path, "/")) {
         $file_path = substr($file_path, 0, -1);
         debug("process_zip: ".$file_path);
     }
 
-    $zip_handle = zip_open($file_path) or die("can't open $file_path: $php_errormsg");
+    $zip_handle = zip_open($file_path) 
+        or die("can't open $file_path: $php_errormsg");
     
     while ($entry = zip_read($zip_handle)) {
         $entry_name = zip_entry_name($entry);
@@ -114,9 +116,7 @@ function process_zip($file_path) {
         debug("entry_name: ".$entry_name);
         if (is_support($entry_name, false)) {
             echo "$entry_name\n";
-            debug("supported");
-        } else {
-            debug("not supported");
+            debug("");
         }
     }
     zip_close($zip_handle);
@@ -127,6 +127,9 @@ function process_zip($file_path) {
 # TODO: testing
 ################################################################################
 function process_rar($file_path) {
+    debug("process_rar: ".$file_path);
+
+    # to support aicromics, the new client app
     if (end_with($file_path, "/")) {
         $file_path = substr($file_path, 0, -1);
         debug("process_rar: ".$file_path);
@@ -151,27 +154,28 @@ function process_rar($file_path) {
 ################################################################################
 function process_file_in_zip($file_path, $type) {
     global $path_parts, $is_debug;
-    debug("process_file_in_zip: ".$file_path." type: ".$type);
+    debug("process_file_in_zip: ".$file_path);
 
-    $zip_file_path = $path_parts['dirname'];
-    $image_file_name = $path_parts['basename'];
-    if (!end_with($zip_file_path, ".zip")) {
-        $zip_file_path = parse_real_path($zip_file_path, ".zip");
-    }
+    $zip_file_path = parse_real_path($file_path, ".zip");
+    $image_path = str_replace($zip_file_path."/", "", $file_path);
+
     debug("zip_file_path: ".$zip_file_path);
-    debug("image_file_name: ".$image_file_name);
+    debug("image_path: ".$image_path);
 
-    $zip_handle = zip_open($zip_file_path) or die("can't open $zip_file_path: $p
-hp_errormsg");
+    # We don't know encoding used in the zip file,
+    # so cannot read file by its name in the zip.
+    $zip_handle = zip_open($zip_file_path) 
+        or die("can't open $zip_file_path: $php_errormsg");
+
     while ($entry = zip_read($zip_handle)) {
         $entry_name = zip_entry_name($entry);
         $entry_name = change_encoding($entry_name);
         $entry_size = zip_entry_filesize($entry);
 
         if ($entry_size > 0) {
-            if (end_with($entry_name, $image_file_name)) {
-                debug("entry_name: ".$entry_name);                
+            if (end_with($entry_name, $image_path)) {
                 if (zip_entry_open($zip_handle, $entry)) {
+                    debug("found file in zip: ".$entry_name);                
                     if (!$is_debug) {
                         header("Content-Type: ".$type);
                         header("Content-Length: ".$entry_size);
@@ -186,6 +190,7 @@ hp_errormsg");
 
 ################################################################################
 # Return image content in the rar file
+# TODO: testing
 ################################################################################
 function process_file_in_rar($file_path, $type) {
     global $path_parts, $is_debug;
@@ -195,9 +200,9 @@ function process_file_in_rar($file_path, $type) {
     $image_file_name = $path_parts['basename'];
     if (!end_with($rar_file_path, ".rar")) {
         $rar_file_path = parse_real_path($rar_file_path, ".rar");
-        $subfolder_path = str_replace($rar_file_path."/","",$path_parts['dirname'])."/";
+        $subfolder_path = 
+            str_replace($rar_file_path."/", "", $path_parts['dirname'])."/";
     }
-    debug("rar_file_path: ".$rar_file_path."subfolder_path:".$subfolder_path.", image_file_name: ".$image_file_name);
     debug("file path :".$subfolder_path.$image_file_name);
     $rar_handle = RarArchive::open($rar_file_path);
     $entry = rar_entry_get($rar_handle, $subfolder_path.$image_file_name);
@@ -328,10 +333,16 @@ function parse_real_path($path, $ext) {
 }
 
 ################################################################################
-# Change string encoding to target_encoding
+# Change string encoding
 ################################################################################
 function change_encoding($name) {
     global $source_encoding, $target_encoding;
+
+    # TODO
+    # To know the string is in the source encoding, 
+    # we try to change encoding from source to source
+    # and check whether the length has changed.
+    # Can we do better?
     $tmp = iconv($source_encoding, $source_encoding, $name);
     if (strlen($tmp) == strlen($name)) {
         return iconv($source_encoding, $target_encoding, $name);
