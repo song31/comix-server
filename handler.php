@@ -23,9 +23,9 @@ $target_encoding = "UTF-8";
 $hidden_fullname = array(".", "..", "@eaDir", "Thumbs.db", ".DS_Store");
 $hidden_partname = array("__MACOSX");
 $image_ext = array("jpg", "gif", "png", "tiff");
-$zip_ext = array("zip", "rar");
+$archive_ext = array("zip", "rar", "cbz", "cbr");
 
-$allows = array_merge($image_ext, $zip_ext);
+$allows = array_merge($image_ext, $archive_ext);
 ini_set('default_charset', $target_encoding);
 
 $request_uri = $_SERVER['REQUEST_URI'];
@@ -50,9 +50,9 @@ if (is_dir($path)) {
     } else {
         if (in_array($ext, $image_ext)) {
             process_image($path, $type);
-        } else if ($ext == "zip") {
+        } else if ($ext == "zip" || $ext == "cbz") {
             process_zip($path);
-        } else if ($ext == "rar") {
+        } else if ($ext == "rar" || $ext == "cbr") {
             process_rar($path);
         } else {
             return;
@@ -156,7 +156,13 @@ function process_file_in_zip($file_path, $type) {
     global $path_parts, $is_debug;
     debug("process_file_in_zip: ".$file_path);
 
-    $zip_file_path = parse_real_path($file_path, ".zip");
+    $zip_file_path = "";
+    if (strpos(strtolower($file_path), ".zip") != FALSE) {
+        $zip_file_path = parse_real_path($file_path, ".zip");
+    }
+    if (strpos(strtolower($file_path), ".cbz") != FALSE) {
+        $zip_file_path = parse_real_path($file_path, ".cbz");
+    }
     $image_path = str_replace($zip_file_path."/", "", $file_path);
 
     debug("zip_file_path: ".$zip_file_path);
@@ -222,7 +228,7 @@ function process_file_in_rar($file_path, $type) {
 # - File (directory) name should not start with ".".
 # - File (directory) name should not in $hidden_fullname 
 # - File (directory) name should not contain strings in $hidden_partname 
-# - File extension should be in $image_ext or $zip_ext
+# - File extension should be in $image_ext or $archive_ext
 ################################################################################
 function is_support($file_name, $is_dir=true) {
     global $hidden_fullname, $hidden_partname, $allows;
@@ -261,11 +267,12 @@ function is_support($file_name, $is_dir=true) {
 # Return true if the file is in a zip file
 ################################################################################
 function is_in_zip($file_path, $ext) {
-    $ret = strpos($file_path, ".zip");
+    $file_path = strtolower($file_path);
+    $ret = strpos($file_path, ".zip") || strpos($file_path, ".cbz");
     if ($ret == false) {
         return false;
     } else {
-        if ($ext == "zip") {
+        if ($ext == "zip" || $ext == "cbz") {
             return false;
         } else {
             return true;
@@ -277,11 +284,12 @@ function is_in_zip($file_path, $ext) {
 # Return true if the file is in a rar file
 ################################################################################
 function is_in_rar($file_path, $ext) {
-    $ret = strpos($file_path, ".rar");
+    $file_path = strtolower($file_path);
+    $ret = strpos($file_path, ".rar") || strpos($file_path, ".cbr");
     if ($ret == false) {
         return false;
     } else {
-        if ($ext == "rar") {
+        if ($ext == "rar" || $ext == "cbr") {
             return false;
         } else {
             return true;
@@ -328,8 +336,10 @@ function end_with($haystack,$needle,$case=true) {
 ################################################################################
 # Cut off the path after extension
 ################################################################################
-function parse_real_path($path, $ext) {
-    return substr($path, 0, strrpos($path, "$ext")).$ext;
+function parse_real_path($path, $ext_with_dot) {
+    $pos = strrpos(strtolower($path), "$ext_with_dot");
+    $ext_real = substr($path, $pos, strlen($ext_with_dot));
+    return substr($path, 0, $pos).$ext_real;
 }
 
 ################################################################################
