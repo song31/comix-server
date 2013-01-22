@@ -47,8 +47,12 @@ The Apache HTTP process automatically starts and is always running on the Synolo
 
 ## FAQ
 
-Q) Do I need to uncompress ZIP files?  
-A) No. Like Windows version, comix-server supports ZIP files.
+Q) Which file formats are supported?  
+A) Comix-server supports archive formats such as ZIP, RAR, CBZ, and CBR.
+   Also it supports most image formats such as JPG, GIF, PNG, and TIFF.
+
+Q) Do I need to uncompress ZIP or RAR files?  
+A) No. Like Windows version, just put them in your manga directory.
 
 Q) How can I change the port number?  
 A) See /usr/syno/apache/conf/httpd.conf-comix.
@@ -56,9 +60,6 @@ A) See /usr/syno/apache/conf/httpd.conf-comix.
 Q) How can I change the manga directory?  
 A) See handler.php. You need to modify handler.php, index.php, user-setting.ini, 
    and httpd.conf-comix.
-
-Q) Does comix-server support other archive formats such as RAR or CBR?  
-A) No. Current version only supports ZIP (or CBZ).
 
 Q) Does comix-server support password protection?  
 A) Yes, using Apache's basic authentication mechanism. Refer to

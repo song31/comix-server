@@ -124,7 +124,6 @@ function process_zip($file_path) {
 
 ################################################################################
 # Print filenames in the rar file
-# TODO: testing
 ################################################################################
 function process_rar($file_path) {
     debug("process_rar: ".$file_path);
@@ -144,6 +143,7 @@ function process_rar($file_path) {
         debug("entry_name: ".$entry_name);
         if (is_support($entry_name, false)) {
             echo "$entry_name\n";
+            debug("");
         }
     }
     $arch->close();
@@ -153,7 +153,7 @@ function process_rar($file_path) {
 # Return image content in the zip file
 ################################################################################
 function process_file_in_zip($file_path, $type) {
-    global $path_parts, $is_debug;
+    global $is_debug;
     debug("process_file_in_zip: ".$file_path);
 
     $zip_file_path = "";
@@ -181,7 +181,7 @@ function process_file_in_zip($file_path, $type) {
         if ($entry_size > 0) {
             if (end_with($entry_name, $image_path)) {
                 if (zip_entry_open($zip_handle, $entry)) {
-                    debug("found file in zip: ".$entry_name);                
+                    debug("found file in zip: ".$entry_name);
                     if (!$is_debug) {
                         header("Content-Type: ".$type);
                         header("Content-Length: ".$entry_size);
@@ -196,30 +196,51 @@ function process_file_in_zip($file_path, $type) {
 
 ################################################################################
 # Return image content in the rar file
-# TODO: testing
 ################################################################################
 function process_file_in_rar($file_path, $type) {
-    global $path_parts, $is_debug;
-    debug("process_file_in_rar: ".$file_path." type: ".$type);
-    $rar_file_path = $path_parts['dirname'];
-    $subfolder_path="";
-    $image_file_name = $path_parts['basename'];
-    if (!end_with($rar_file_path, ".rar")) {
-        $rar_file_path = parse_real_path($rar_file_path, ".rar");
-        $subfolder_path = 
-            str_replace($rar_file_path."/", "", $path_parts['dirname'])."/";
+    global $is_debug;
+    debug("process_file_in_rar: ".$file_path);
+
+    $rar_file_path = "";
+    if (strpos(strtolower($file_path), ".rar") != FALSE) {
+        $rar_file_path = parse_real_path($file_path, ".rar");
     }
-    debug("file path :".$subfolder_path.$image_file_name);
-    $rar_handle = RarArchive::open($rar_file_path);
-    $entry = rar_entry_get($rar_handle, $subfolder_path.$image_file_name);
-    $fp = $entry->getStream();
-    rar_close($rar_handle);
-    while (!feof($fp)) {
-        $buff = fread($fp, 8192);
-        if ($buff !== false) echo $buff;
-        else break;
+    if (strpos(strtolower($file_path), ".cbr") != FALSE) {
+        $rar_file_path = parse_real_path($file_path, ".cbr");
     }
-    fclose($fp);
+    $image_path = str_replace($rar_file_path."/", "", $file_path);
+
+    debug("rar_file_path: ".$rar_file_path);
+    debug("image_path: ".$image_path);
+
+    $rar_handle = rar_open($rar_file_path);
+    if ($rar_handle != FALSE) {
+        foreach ($rar_handle->getEntries() as $entry) {
+            $entry_name = $entry->getName();
+            $entry_name = change_encoding($entry_name);
+            if (end_with($entry_name, $image_path)) {
+                debug("found file in rar: ".$entry_name);
+                $entry_size = $entry->getUnpackedSize();
+                $fp = $entry->getStream();
+                rar_close($rar_handle);
+                if (!$is_debug) {
+                    header("Content-Type: ".$type);
+                    header("Content-Length: ".$entry_size);
+                    while (!feof($fp)) {
+                        $buff = fread($fp, 8192);
+                        if ($buff !== false) {
+                            echo $buff;
+                        } else {
+                            break;
+                        }
+                    }
+                }
+                fclose($fp);
+            }
+        }
+    } else {
+        debug("handle error");
+    }
 }
 
 ################################################################################
