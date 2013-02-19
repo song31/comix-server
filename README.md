@@ -15,8 +15,8 @@ version) app.
 - Log in to the Synology DSM and make a shared folder, for example,
   named "manga". This directory will be your manga directory.
 - Enable SSH and Web Station.
-- Download [install.sh](https://github.com/song31/comix-server/blob/master/install.sh) 
-  and copy it to your manga directory.
+- Download [comix-server-master.zip](https://github.com/song31/comix-server/archive/master.zip),
+  unzip it, and copy install.sh and uninstall.sh to your manga directory.
 - Connect to your Synology server using SSH as root and go to the manga 
   directory (/volume1/manga). The path might be different in your
   system. Modify *MANGA_DIR* in install.sh if the path is not /volume1/manga.   
@@ -37,8 +37,7 @@ For more information, please refer to the [step-by-step guide](https://github.co
 
 ## How to uninstall
 
-- Download [uninstall.sh](https://github.com/song31/comix-server/blob/master/uninstall.sh) 
-  and run it on the Synology shell.
+- Run uninstall.sh on the Synology shell.
 
 Special thanks to "20eung" for providing the install & uninstall script.
 
