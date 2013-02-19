@@ -39,9 +39,9 @@ This guide is written based on Synology DSM version 4.1, but menus and features 
 
 ## Installation using installer
 
-- Download install.sh using the following link: <https://github.com/song31/comix-server/blob/master/install.sh>.
+- Download comix-server-master.zip using the following link: <https://github.com/song31/comix-server/archive/master.zip>.   
 
-- Copy install.sh to your *manga* directory using whatever protocol you like.  
+- Unzip the comix-server-master.zip you downloaded and copy install.sh and uninstall.sh to your *manga* directory using whatever protocol you like. You don't need to copy other files. The installer will download necessary files on the Synology server.  
 
 - Connect to your Synology NAS as *root* using an SSH client such as 
   [PuTTY](http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html).   
@@ -73,23 +73,17 @@ The installer does everything for you, even restarts Apache HTTP Server. Now you
 
 
 ## Uninstallation using uninstaller
-- Download uninstall.sh using the following link: <https://github.com/song31/comix-server/blob/master/uninstall.sh>.
 
-- Copy uninstall.sh to your *manga* directory using whatever protocol you like.  
-
-- Connect to your Synology NAS as *root* using an SSH client such as 
-  [PuTTY](http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html).   
-  The password of the *root* account is same as the admin user's in DSM.
-
-- In the shell, go to the *manga* directory and make sure uninstall.sh is copied there.
+- Connect to the Synology server using SSH, got to your *manga* directory, and make sure uninstall.sh is copied there. 
 
   ```
   DiskStation> cd /volume1/manga
   DiskStation> ls uninstall.sh
   ```
 
-  The *manga* directory's path might be different in your system.
-
+  The *manga* directory's path might be different in your system.    
+  If uninstall.sh does not exist there, follow the step 1 and 2 in the installation section.
+   
 - Make uninstall.sh executable.
 
   ```
