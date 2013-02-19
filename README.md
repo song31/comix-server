@@ -44,7 +44,7 @@ Special thanks to "20eung" for providing the install & uninstall script.
 
 ## How to run
 
-Start the Apache HTTP Server. Usually the Apache HTTP process automatically starts when the machine boots up.
+Start Apache HTTP Server. Usually the Apache HTTP process automatically starts when the machine boots up.
 
 
 ## How to use
