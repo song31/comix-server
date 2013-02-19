@@ -36,8 +36,8 @@ version. Originally it was written to run on the Synology NAS. However,
 it can run on any platforms where Apache HTTP Server runs, such as
 Ubuntu Linux or OS X.</p>
 
-<p>Comix-server works with both AirComix (old version) and AirComics (new
-version) app.</p>
+<p>Comix-server is compatible with both AirComix (old version) and AirComics
+(new version) app.</p>
 
 <h2>How to install</h2>
 
@@ -77,17 +77,15 @@ DiskStation&gt; ./install.sh
 
 <h2>How to run</h2>
 
-<p>The Apache HTTP process automatically starts and is always running on
-the Synology server.</p>
+<p>Start Apache HTTP Server. Usually the Apache HTTP process automatically starts when the machine boots up.</p>
 
 <h2>How to use</h2>
 
 <ul>
 <li>Copy your comic collection to the manga directory.</li>
-<li>Start AirComics app on your iPhone/iPad and add your Synology server.
-Touch <strong>Enter Address Manually</strong> and put the server name, IP address,
-and the port number.
-Use the default port number, 31257.</li>
+<li>Start the AirComics app on iPhones or iPads and add comix-server as AIRCOMICS Server.
+Select the <strong>Enter Address Manually</strong> menu to fill in your comix-server information.
+Note that default port number is 31257.</li>
 <li>Enjoy!</li>
 </ul>
 
@@ -111,7 +109,7 @@ A) Comix-server supports archive formats such as ZIP, RAR, CBZ, and CBR.
 A) No. Like Windows version, just put them in your manga directory.
    However, comix-server does not handle double-zipped files.</p>
 
-<p>Q) Can I have multiple directories under my manga directory?
+<p>Q) Can I have multiple directories under my manga directory?<br/>
 A) Yes. You can make any directory structure.
    One restriction is that image files can be only in a leaf directory,
    which does not have any child directory.</p>
@@ -136,12 +134,13 @@ A) Yes, using Apache's basic authentication mechanism. Refer to
 A) If you have a directory which contains image files as well as ZIP files,
    move image files (or ZIP files) to another directory.
    A single directory can have multiple image files or multiple ZIP files,
-   but not both image and ZIP files.</p>
+   but not both.</p>
 
 <h2>License</h2>
 
 <p>Comix-server is free software licensed under <a href="http://www.gnu.org/licenses/gpl.txt">GNU GPLv3</a>.
 Everyone is permitted to copy, modify, and redistribute it.</p>
+
 
 <p>
 You can use comix-server for free, but if you find it useful, we would apreciate a small payment between $1 - $5 through PayPal.
