@@ -31,80 +31,118 @@
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
-        <p>Comix-server is a PHP-based AirComix Server acting just as the Windows
-version.  Originally it was made to run on the Synology NAS.  However,
+        <p>Comix-server is a PHP-based AirComics Server acting just as the Windows
+version. Originally it was written to run on the Synology NAS. However,
 it can run on any platforms where Apache HTTP Server runs, such as
-Ubuntu Linux or OS X.
-</p>
+Ubuntu Linux or OS X.</p>
 
-<p>Comix-server works with both AirComix (old version) and AirComics (new version). </p>
-
-<h2>How to download</h2>
-
-<p>Go to <a href="http://song31.github.com/comix-server/">http://song31.github.com/comix-server/</a> and click the tar.gz or
-zip folder icons in the page.</p>
+<p>Comix-server works with both AirComix (old version) and AirComics (new
+version) app.</p>
 
 <h2>How to install</h2>
 
-<p>You can find a step-by-step guide at 
-<a href="https://github.com/song31/comix-server/wiki/Step-by-Step-Configuration-Guide">https://github.com/song31/comix-server/wiki/Step-by-Step-Configuration-Guide</a>  </p>
+<ul>
+<li>Log in to the Synology DSM and make a shared folder, for example,
+named "manga". This directory will be your manga directory.</li>
+<li>Enable SSH and Web Station.</li>
+<li>Download <a href="https://github.com/song31/comix-server/archive/master.zip">comix-server-master.zip</a>,
+unzip it, and copy install.sh and uninstall.sh to your manga directory.</li>
+<li>Connect to your Synology server using SSH as root and go to the manga
+directory (/volume1/manga). The path might be different in your
+system. Modify <em>MANGA_DIR</em> in install.sh if the path is not /volume1/manga. <br/>
+<code>
+DiskStation&gt; cd /volume1/manga
+</code></li>
+<li>Give the execution permission on install.sh. <br/>
+<code>
+DiskStation&gt; chmod 755 install.sh
+</code></li>
+<li>Run install.sh. <br/>
+<code>
+DiskStation&gt; ./install.sh
+</code></li>
+</ul>
 
-<p>In short,</p>
+
+<p>For more information, please refer to the <a href="https://github.com/song31/comix-server/wiki/Step-by-Step-Configuration-Guide">step-by-step guide</a>.</p>
+
+<h2>How to uninstall</h2>
 
 <ul>
-<li>Log in to the Synology DSM and make a shared folder, for example, named
-"manga". This directory will be your manga directory.</li>
-<li>Enable SSH.</li>
-<li>Unzip the downloaded file and copy all to the "web" folder (/var/services/web, default DocumentRoot).</li>
-<li>Connect to your Synology server using SSH and do the remaining steps.</li>
-<li>Copy conf/httpd.conf-comix to /usr/syno/apache/conf/.</li>
-<li>Add the following line, "Include /usr/syno/apache/conf/httpd.conf-comix", 
-without quotes of course, at the end of /usr/syno/apache/conf/httpd.conf and 
-/usr/syno/apache/conf/httpd.conf-user. </li>
-<li>Add the manga directory's path to the open_basedir variable in
-/usr/syno/etc/php/user-setting.ini.</li>
-<li>You might need to modify files to set up your manga directory. See handler.php for details.</li> 
-<li>Reboot the Synology server.</li>
-</ul><h2>How to run</h2>
+<li>Run uninstall.sh on the Synology shell.</li>
+</ul>
 
-<p>The Apache HTTP process automatically starts and is always running on the Synology server.</p>
+
+<p>Special thanks to "20eung" for providing the install &amp; uninstall script.</p>
+
+<h2>How to run</h2>
+
+<p>The Apache HTTP process automatically starts and is always running on
+the Synology server.</p>
 
 <h2>How to use</h2>
 
 <ul>
 <li>Copy your comic collection to the manga directory.</li>
-<li>Start AirComix app on your iPhone/iPad and add your Synology server. 
-Use the default port number, 31251.</li>
+<li>Start AirComics app on your iPhone/iPad and add your Synology server.
+Touch <strong>Enter Address Manually</strong> and put the server name, IP address,
+and the port number.
+Use the default port number, 31257.</li>
 <li>Enjoy!</li>
-</ul><h2>FAQ</h2>
+</ul>
 
-<p>Q) Which file formats are supported?<br>
-A) Comix-server supports archive formats such as ZIP, RAR, CBZ, and CBR. 
-   Also it supports most image formats such as JPG, GIF, PNG, and TIFF.</p>
-
-<p>Q) Do I need to uncompress ZIP or RAR files?<br>
-A) No. Like Windows version, just put them in your manga directory.</p>
-
-<p>Q) How can I change the port number?<br>
-A) See /usr/syno/apache/conf/httpd.conf-comix.</p>
-
-<p>Q) How can I change the manga directory?<br>
-A) See handler.php. You need to modify handler.php, index.php, user-setting.ini, 
-   and httpd.conf-comix.</p>
-
-<p>Q) Does comix-server support password protection?<br>
-A) Yes, using Apache's basic authentication mechanism. Refer to
-   <a href="http://www.cs.duke.edu/csl/faqs/web/basic-auth">http://www.cs.duke.edu/csl/faqs/web/basic-auth</a> to know how to
-   configure it. Note that the user name should be AirComix (case
-   sensitve) and .htaccess file should be in /var/services/web where
-   handler.php exists. If there is no htpasswd util in your system, you can
-   create the password file on other machines and copy it to
-   your system.</p>
 
 <h2>How to contribute</h2>
 
-<p>Bug reports and pull requests are always welcome.
-</p>
+<p>Bug reports and pull requests are always welcome.</p>
+
+<h2>FAQ</h2>
+
+<p>Q) Which file formats are supported?<br/>
+A) Comix-server supports archive formats such as ZIP, RAR, CBZ, and CBR.
+   Also it supports most image formats such as JPG, GIF, PNG, and TIFF.</p>
+
+<p>Q) Does comix-server really support RAR?
+   Yes if your system has PHP extension for RAR. You can easily install
+   it on Linux platform (see <a href="http://www.php.net/manual/en/rar.installation.php">http://www.php.net/manual/en/rar.installation.php</a>
+   for detail), but it seems hard to install it on Synology servers.</p>
+
+<p>Q) Do I need to uncompress ZIP or RAR files?<br/>
+A) No. Like Windows version, just put them in your manga directory.
+   However, comix-server does not handle double-zipped files.</p>
+
+<p>Q) Can I have multiple directories under my manga directory?
+A) Yes. You can make any directory structure.
+   One restriction is that image files can be only in a leaf directory,
+   which does not have any child directory.</p>
+
+<p>Q) How can I change the port number?<br/>
+A) See /usr/syno/apache/conf/httpd.conf-comix.</p>
+
+<p>Q) How can I change the manga directory?<br/>
+A) See comments in handler.php. You need to modify handler.php, index.php,
+   user-setting.ini, and httpd.conf-comix.</p>
+
+<p>Q) Does comix-server support password protection?<br/>
+A) Yes, using Apache's basic authentication mechanism. Refer to
+   <a href="http://www.cs.duke.edu/csl/faqs/web/basic-auth">http://www.cs.duke.edu/csl/faqs/web/basic-auth</a> to know how to
+   configure it. Note that the user name should be AirComix (case
+   sensitve) and .htaccess file should be in /var/services/web/comix where
+   handler.php exists. If there is no htpasswd util in your system,
+   you can create the password file on other machines and copy it to
+   your system.</p>
+
+<p>Q) I cannot see some files under the manga directory. What is the problem? <br/>
+A) If you have a directory which contains image files as well as ZIP files,
+   move image files (or ZIP files) to another directory.
+   A single directory can have multiple image files or multiple ZIP files,
+   but not both image and ZIP files.</p>
+
+<h2>License</h2>
+
+<p>Comix-server is free software licensed under <a href="http://www.gnu.org/licenses/gpl.txt">GNU GPLv3</a>.
+Everyone is permitted to copy, modify, and redistribute it.</p>
+
 <p>
 You can use comix-server for free, but if you find it useful, we would apreciate a small payment between $1 - $5 through PayPal.
 <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
