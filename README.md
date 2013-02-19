@@ -6,8 +6,8 @@ version. Originally it was written to run on the Synology NAS. However,
 it can run on any platforms where Apache HTTP Server runs, such as
 Ubuntu Linux or OS X.
 
-Comix-server works with both AirComix (old version) and AirComics (new
-version) app.
+Comix-server is compatible with both AirComix (old version) and AirComics 
+(new version) app.
 
 
 ## How to install
@@ -44,17 +44,15 @@ Special thanks to "20eung" for providing the install & uninstall script.
 
 ## How to run
 
-The Apache HTTP process automatically starts and is always running on
-the Synology server.
+Start the Apache HTTP Server. Usually the Apache HTTP process automatically starts when the machine boots up.
 
 
 ## How to use
 
 - Copy your comic collection to the manga directory.
-- Start AirComics app on your iPhone/iPad and add your Synology server.
-  Touch **Enter Address Manually** and put the server name, IP address, 
-  and the port number.
-  Use the default port number, 31257.
+- Start the AirComics app on iPhones or iPads and add comix-server as AIRCOMICS Server.
+  Select the **Enter Address Manually** menu to fill in your comix-server information.
+  Note that default port number is 31257.
 - Enjoy!
 
 
@@ -78,7 +76,7 @@ Q) Do I need to uncompress ZIP or RAR files?
 A) No. Like Windows version, just put them in your manga directory.
    However, comix-server does not handle double-zipped files.
 
-Q) Can I have multiple directories under my manga directory?
+Q) Can I have multiple directories under my manga directory?  
 A) Yes. You can make any directory structure. 
    One restriction is that image files can be only in a leaf directory, 
    which does not have any child directory.
@@ -103,7 +101,7 @@ Q) I cannot see some files under the manga directory. What is the problem?
 A) If you have a directory which contains image files as well as ZIP files, 
    move image files (or ZIP files) to another directory. 
    A single directory can have multiple image files or multiple ZIP files, 
-   but not both image and ZIP files.  
+   but not both.  
 
 
 ## License
