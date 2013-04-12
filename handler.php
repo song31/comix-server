@@ -22,7 +22,7 @@ $source_encoding = "EUC-KR";
 $target_encoding = "UTF-8";
 $hidden_fullname = array(".", "..", "@eaDir", "Thumbs.db", ".DS_Store");
 $hidden_partname = array("__MACOSX");
-$image_ext = array("jpg", "gif", "png", "tiff");
+$image_ext = array("jpg", "gif", "png", "tif", "bmp", "jpeg", "tiff");          
 $archive_ext = array("zip", "rar", "cbz", "cbr");
 
 $allows = array_merge($image_ext, $archive_ext);
@@ -324,7 +324,9 @@ function is_in_rar($file_path, $ext) {
 function get_content_type($ext) {
     if ($ext == "jpg") {
         return "image/jpeg";
-    } else {
+    } else if ($ext == "tif") {                                                 
+        return "image/tiff";                                                    
+    } else {        
         return "image/".$ext;
     }
 }
