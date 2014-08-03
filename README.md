@@ -12,6 +12,7 @@ Comix-server is compatible with both AirComix (old version) and AirComics
 
 ## How to install
 
+- Please note that install script was only tested on Synology DSM 4.x. You might need to change the path of apache or php to run it on DSM 5.x.
 - Log in to the Synology DSM and make a shared folder, for example,
   named "manga". This directory will be your manga directory.
 - Enable SSH and Web Station.
