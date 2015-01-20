@@ -12,7 +12,7 @@ Comix-server is compatible with both AirComix (old version) and AirComics
 
 ## How to install
 
-- Please note that install script was only tested on Synology DSM 4.x. You might need to change the path of apache or php to run it on DSM 5.x.
+- Installer now supports both **DSM 5.x** and 4.x.
 - Log in to the Synology DSM and make a shared folder, for example,
   named "manga". This directory will be your manga directory.
 - Enable SSH and Web Station.
@@ -33,7 +33,7 @@ Comix-server is compatible with both AirComix (old version) and AirComics
   DiskStation> ./install.sh
   ```
   
-For more information, please refer to the [step-by-step guide](https://github.com/song31/comix-server/wiki/Step-by-Step-Configuration-Guide).  
+For more information about installation, please refer to the [INSTALL.md](https://github.com/song31/comix-server/blob/master/INSTALL.md).  
 
 
 ## How to uninstall
@@ -63,6 +63,9 @@ Bug reports and pull requests are always welcome.
 
 
 ## FAQ
+
+Q) Which Synology DSM versions are supported?   
+A) The install script was tested only on DSM 5.x and 4.x. However, comix-server itself is just a web application written in PHP so it should run on any platforms with HTTPD & PHP.
 
 Q) Which file formats are supported?  
 A) Comix-server supports archive formats such as ZIP, RAR, CBZ, and CBR.

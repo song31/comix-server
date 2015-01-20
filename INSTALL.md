@@ -69,7 +69,7 @@ This guide is written based on Synology DSM version 4.1, but menus and features 
   DiskStation> ./install.sh
   ```
 
-The installer does everything for you, even restarts Apache HTTP Server. Now you can add your comix-server in the AirComics app. Use **Enter Address Manually** and put the server name, IP address, and the port number. The default port numer is 31257.
+The installer does everything for you: detects DSM version to determine configuration file path, updates Apahe and PHP configuration, installs comix-server, and restarts Apache HTTP Server. Now you can add your comix-server in the AirComics app. Use **Enter Address Manually** and put the server name, IP address, and the port number. The default port numer is 31257.
 
 
 ## Uninstallation using uninstaller
@@ -102,7 +102,7 @@ The uninstaller removes only comix-server's files and configuration. **It does N
 ## Manual installation (optional)
 
 This section describes how to install comix-server manually without using installer. **If you already installed comix-server using installer, skip this section.**   
-Most of the Apache configuration will be done on the Linux shell so you need to prepare an SSH client to connect to your Synology server. Any command starting with “DistStation>” in this guide should be run on the shell in the Synology server. 
+Most of the Apache configuration will be done on the Linux shell so you need to prepare an SSH client to connect to your Synology server. Any command starting with "DistStation>" in this guide should be run on the shell in the Synology server. 
 
 - Connect to your Synology NAS as *root* using an SSH client. The password of the *root* account is same as the admin user's in DSM.
 
@@ -130,7 +130,7 @@ Most of the Apache configuration will be done on the Linux shell so you need to 
   DiskStation> cp /var/services/web/comix-server/conf/httpd.conf-comix /usr/syno/apache/conf/httpd.conf-comix
   ```
 
-- Open /usr/syno/apache/conf/httpd.conf-user using a text editor, I guess the only option is vi, and add the following line, “Include /usr/syno/apache/conf/httpd.conf-comix”, at the end of the file. The httpd.conf-user file is a template for httpd.conf, which is the actual configuration file for Apache. The httpd.conf file is regenerated based on the template file whenever the Synology server boots up.
+- Open /usr/syno/apache/conf/httpd.conf-user using a text editor, I guess the only option is vi, and add the following line, "Include /usr/syno/apache/conf/httpd.conf-comix", at the end of the file. The httpd.conf-user file is a template for httpd.conf, which is the actual configuration file for Apache. The httpd.conf file is regenerated based on the template file whenever the Synology server boots up.
 
   ```
   DiskStation> cd /usr/syno/apache/conf   
@@ -145,25 +145,32 @@ Most of the Apache configuration will be done on the Linux shell so you need to 
 
 - Also add the same line to /usr/syno/apache/conf/httpd.conf to apply it without rebooting.
 
-- Open /usr/syno/etc/php/user-setting.ini and add the *web* and *manga* directory’s full path at the end of the *open_basedir* variable. **Note that you should put a colon in front of each path**.    
+- Open /usr/syno/etc/php/user-setting.ini and add the *web* and *manga* directory's full path at the end of the *open_basedir* variable. **Note that you should put a colon in front of each path**.    
 
   ```
   DiskStation> cd /usr/syno/etc/php
   DiskStation> vi user-setting.ini
   ```
 	
-  > open_basedir = xxxyyyyzzzz:/var/services/web/comix-server:/volume1/maa  
+  > open_basedir = xxxyyyyzzzz:/var/services/web/comix-server:/volume1/manga  
 
   Note that the *manga* directory's path, /volume1/manga, might be different in your server. Make sure you are entering the correct path. See Customization section if you have a different path.  
 
+- Make sure your *manga* directory has the right Linux file permission so comix-server can access it.
+  
+  ```
+  DiskStation> chmod 755 /volume1/manga
+
+  ```
+
 - Restart httpd to apply configuration change, or you can reboot the system using DSM menu.
-    - Find httpd parent process’s PID.  
+    - Find httpd parent process's PID.  
         
       ```
       DiskStation> ps | grep HAVE_PHP  
       ```
         
-      In the result, the first number followed by “root” is the PID like below.   
+      In the result, the first number followed by "root" is the PID like below.   
         
       ```
       10442 root     65032 S    /usr/syno/apache/bin/httpd -DHAVE_PHP   
@@ -297,8 +304,8 @@ Now the server-side password is enabled. You need to enter the password (e.g., 1
 
 ## Troubleshooting
 
-1. If you cannot connect to comix-server or get “Can not connect to server” error message, check the following list.
-    - Httpd processes. There should be a few “/usr/syno/apache/bin/httpd -DHAVE_PHP” processes running on the Synology server.
+1. If you cannot connect to comix-server or get "Can not connect to server" error message, check the following list.
+    - Httpd processes. There should be a few "/usr/syno/apache/bin/httpd -DHAVE_PHP" processes running on the Synology server.
     - Correct port number.
     - Correct password, if server-side password is enabled.  
 
@@ -308,14 +315,14 @@ Now the server-side password is enabled. You need to enter the password (e.g., 1
 
     You can test comix-server using a web browser. Open a web browser and go to http://\<your synology ip\>:31257. The browser should display the name of your manga directory.  
 
-4. If you don’t see the list of directories and files after you click the *manga* directory, check the following list.
+4. If you don't see the list of directories and files after you click the *manga* directory, check the following list.
     - *Manga* directory configuration. See Customization section to know how to configure/change the *manga* directory.
-    - Linux permission of the directories and files. Apache HTTP Server runs as nobody so all users should have execution permission (x) on all directories from root to any subdirectories under your manga directory. All users should also have read permission (r) on all your manga files. Change permission carefully using the chmod command on the shell.
-    - PHP open_basedir configuration. By default, PHP can open files in any directories, but the access is limited to specific directories by setting the open_basedir variable. In Synology, you should add your *manga* directory in /usr/syno/etc/php/user-setting.ini because this limitation is on by default. In Linux, open_basedir is usually not set on and you don’t need to add your directories in it. Refer to http://php.net/manual/en/ini.core.php for more information.
+    - Linux permission of the directories and files. Apache HTTP Server runs as nobody (or http) so all users should have execution permission (x) on all directories from root to any subdirectories under your manga directory. All users should also have read permission (r) on all your manga files. Change permission carefully using the chmod command on the shell. **Note that in DSM 5.x, default permision of shared directories is 000 so you need to run 'chmod 755 /volume1/manga' after creating your *manga* directory.**
+    - PHP open_basedir configuration. By default, PHP can open files in any directories, but the access is limited to specific directories by setting the open_basedir variable. In Synology, you should add your *manga* directory in /usr/syno/etc/php/user-setting.ini because this limitation is on by default. In Linux, open_basedir is usually not set on and you don't need to add your directories in it. Refer to http://php.net/manual/en/ini.core.php for more information.
 
     You can test comix-server using a web browser. Open a web browser and go to http://\<your synology ip\>:31257/manga. The directories or files under your manga folder will show up in the browser. 
 
-    Let’s say we have a file, /volume1/manga/folder1/01.zip and 01.zip contains 01.jpg to 10.jpg. Requesting http://\<your synology ip\>:31257/manga will show folder1 in the browser and requesting http://\<your synology ip\>:31257/manga/folder1 will show 01.zip. Requesting http://\<your synology ip\>:31257/manga/folder1/01.zip will return the list of files in the ZIP file: 01.jpg to 10.jpg. Finally, requesting http://\<your synology ip\>:31257/manga/folder1/01.zip/01.jpg will display the actual image in the browser.
+    Let's say we have a file, /volume1/manga/folder1/01.zip and 01.zip contains 01.jpg to 10.jpg. Requesting http://\<your synology ip\>:31257/manga will show folder1 in the browser and requesting http://\<your synology ip\>:31257/manga/folder1 will show 01.zip. Requesting http://\<your synology ip\>:31257/manga/folder1/01.zip will return the list of files in the ZIP file: 01.jpg to 10.jpg. Finally, requesting http://\<your synology ip\>:31257/manga/folder1/01.zip/01.jpg will display the actual image in the browser.
 
 5. If you see "can't open xxxxx.zip" when you request a ZIP file from a web browser, check the *open_basedir* variable in the user-setting.ini file. Make sure you correctly add your *manga* directory in the list. Also check whether each path in the list is separated by colons.   
 
