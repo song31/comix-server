@@ -68,15 +68,13 @@ Q) Which Synology DSM versions are supported?
 A) The install script was tested only on DSM 5.x and 4.x. However, comix-server itself is just a web application written in PHP so it should run on any platforms with HTTPD & PHP.
 
 Q) Which file formats are supported?  
-A) Comix-server supports archive formats such as ZIP, RAR, CBZ, and CBR.
+A) Comix-server supports archive formats such as ZIP and CBZ.
    Also it supports most image formats such as JPG, GIF, PNG, and TIFF.
 
-Q) Does comix-server really support RAR?
-   Yes if your system has PHP extension for RAR. You can easily install 
-   it on Linux platform (see <http://www.php.net/manual/en/rar.installation.php> 
-   for detail), but it seems hard to install it on Synology servers.
+Q) Does comix-server support RAR or CBR format?  
+A) Depends. Your system needs PHP extension for RAR. On Linux, you can easily install it (see <http://www.php.net/manual/en/rar.installation.php> for more details), but on Synology DSM, it seems very hard to install it. Please let me know if you find a way!
 
-Q) Do I need to uncompress ZIP or RAR files?  
+Q) Do I need to uncompress ZIP or CBZ files?  
 A) No. Like Windows version, just put them in your manga directory.
    However, comix-server does not handle double-zipped files.
 
