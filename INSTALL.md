@@ -25,7 +25,7 @@ This guide is written based on Synology DSM version 4.1, but menus and features 
     - In the DSM, go to Control Panel -> Shared Folder -> Create.
     - In the Shared Folder Info panel, fill in the following fields and press OK.
         - Name: manga
-        - Description: AirComics Manga Directory
+        - Description: AirComix Manga Directory
     - Edit the privilege setting.
 
   After creating the shared folder, make sure that you can copy manga files to the *manga*
@@ -69,7 +69,7 @@ This guide is written based on Synology DSM version 4.1, but menus and features 
   DiskStation> ./install.sh
   ```
 
-The installer does everything for you: detects DSM version to determine configuration file path, updates Apahe and PHP configuration, installs comix-server, and restarts Apache HTTP Server. Now you can add your comix-server in the AirComics app. Use **Enter Address Manually** and put the server name, IP address, and the port number. The default port numer is 31257.
+The installer does everything for you: detects DSM version to determine configuration file path, updates Apahe and PHP configuration, installs comix-server, and restarts Apache HTTP Server. Now you can add your comix-server in the AirComix app. Use **AirComix Server URL** and put the server name, IP address, and the port number on the app. The default port numer is 31257.
 
 
 ## Uninstallation using uninstaller
@@ -222,7 +222,7 @@ In order to enable the server-side password protection, you need to configure Ap
 
   Make sure the variable *AuthUserFile* in *.htaccess* points the correct path of *.htpasswd*.  
 
-Now the server-side password is enabled. You need to enter the password (e.g., 1234) in the server configuration on the AirComics app.
+Now the server-side password is enabled. You need to enter the password (e.g., 1234) in the server configuration on the AirComix app.
 
 
 
@@ -298,7 +298,7 @@ Now the server-side password is enabled. You need to enter the password (e.g., 1
 
 - To change port number, modify httpd.conf-comix. You need to change both *Listen* and *VirtualHost* directives in the file.
 
-- To change the welcome message shown when you connect to the server, modify welcome.php. The welcome message is only shown when you use the older version, AirComix app.
+- To change the welcome message shown when you connect to the server, modify welcome.php. The welcome message is only shown when you use the older version of the AirComix app.
 
   
 

@@ -1,13 +1,12 @@
 comix-server
 ============
 
-Comix-server is a PHP-based AirComics Server acting just as the Windows
+Comix-server is a PHP-based AirComix Server acting just as the Windows
 version. Originally it was written to run on the Synology NAS. However,
 it can run on any platforms where Apache HTTP Server runs, such as
 Ubuntu Linux or OS X.
 
-Comix-server is compatible with both AirComix (old version) and AirComics 
-(new version) app.
+Comix-server is only compatible with **iOS AirComix** app.
 
 
 ## How to install
@@ -51,8 +50,8 @@ Start Apache HTTP Server. Usually the Apache HTTP process automatically starts w
 ## How to use
 
 - Copy your comic collection to the manga directory.
-- Start the AirComics app on iPhones or iPads and add comix-server as AIRCOMICS Server.
-  Select the **Enter Address Manually** menu to fill in your comix-server information.
+- Start the AirComix app on your iOS devices and add comix-server as an AirComix Server.
+  Select the **AirComix Server URL** menu to fill in your comix-server information.
   Note that default port number is 31257.
 - Enjoy!
 
@@ -84,7 +83,7 @@ A) Yes. You can make any directory structure.
    which does not have any child directory.
 
 Q) How can I change the port number?  
-A) See /usr/syno/apache/conf/httpd.conf-comix.
+A) See conf/httpd.conf-comix.
 
 Q) How can I change the manga directory?  
 A) See comments in handler.php. You need to modify handler.php, index.php, 
@@ -93,7 +92,7 @@ A) See comments in handler.php. You need to modify handler.php, index.php,
 Q) Does comix-server support password protection?  
 A) Yes, using Apache's basic authentication mechanism. Refer to 
    <http://www.cs.duke.edu/csl/faqs/web/basic-auth> to know how to
-   configure it. Note that the user name should be AirComix (case
+   configure it. Note that the user name must be AirComix (case
    sensitve) and .htaccess file should be in /var/services/web/comix where
    handler.php exists. If there is no htpasswd util in your system, 
    you can create the password file on other machines and copy it to
