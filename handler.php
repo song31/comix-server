@@ -67,9 +67,10 @@ if (is_dir($path)) {
 function list_dir($dir_path) {
     debug("list_dir: ". $dir_path);
     if ($handle = opendir($dir_path)) {
-        while (false !== ($file = readdir($handle))) {
-            if (is_support($file)) {
-                echo "$file\n";
+        while (false !== ($file_name = readdir($handle))) {
+            $is_dir = is_dir($dir_path."/".$file_name);
+            if (is_support($file, $is_dir)) {
+                echo "$file_name\n";
             }
         }
         closedir($handle);
@@ -268,20 +269,15 @@ function is_support($file_name, $is_dir=true) {
             return false;
         }
     }
+
+    if ($is_dir)
+        return true;
+
     $ext =  get_file_extension($file_name);
-    if ($ext) {
-        if (in_array($ext, $allows)) {
-            return true;
-        } else {
-            return false;
-        }
-    } else {
-        if ($is_dir) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+    if ($ext && in_array($ext, $allows))
+        return true;
+    else
+        return false;
 }
 
 ################################################################################
