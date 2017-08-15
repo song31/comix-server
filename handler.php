@@ -67,13 +67,24 @@ if (is_dir($path)) {
 function list_dir($dir_path) {
     debug("list_dir: ". $dir_path);
     if ($handle = opendir($dir_path)) {
+        $dlist = array();
+        $filst = array();
+
         while (false !== ($file_name = readdir($handle))) {
-            $is_dir = is_dir($dir_path."/".$file_name);
-            if (is_support($file, $is_dir)) {
-                echo "$file_name\n";
+            $full_path = $dir_path."/".$file_name;
+
+            if (is_support($file_name, is_dir($full_path)))
+            {
+                if (is_dir($full_path))
+                    $dlist[] = $file_name;
+                else
+                    $flist[] = $file_name;
             }
         }
         closedir($handle);
+
+        // print
+        print_list($dlist, $flist);
     }
     exit;
 }
@@ -102,6 +113,8 @@ function process_image($file_path, $type) {
 function process_zip($file_path) {
     debug("process_zip: ".$file_path);
 
+    $list = array();
+
     # to support aicromics, the new client app
     if (end_with($file_path, "/")) {
         $file_path = substr($file_path, 0, -1);
@@ -116,11 +129,14 @@ function process_zip($file_path) {
         $entry_name = change_encoding($entry_name);
         debug("entry_name: ".$entry_name);
         if (is_support($entry_name, false)) {
-            echo "$entry_name\n";
+            $list[] = "$entry_name";
             debug("");
         }
     }
     zip_close($zip_handle);
+
+    // print
+    print_list(array(), $list);
 }
 
 ################################################################################
@@ -128,6 +144,8 @@ function process_zip($file_path) {
 ################################################################################
 function process_rar($file_path) {
     debug("process_rar: ".$file_path);
+
+    $list = array();
 
     # to support aicromics, the new client app
     if (end_with($file_path, "/")) {
@@ -143,11 +161,14 @@ function process_rar($file_path) {
         $entry_name = $entries[$i]->getName();
         debug("entry_name: ".$entry_name);
         if (is_support($entry_name, false)) {
-            echo "$entry_name\n";
+            $list[] = "$entry_name";
             debug("");
         }
     }
     $arch->close();
+
+    // print
+    print_list(array(), $list);
 }
 
 ################################################################################
@@ -155,6 +176,7 @@ function process_rar($file_path) {
 ################################################################################
 function process_file_in_zip($file_path, $type) {
     global $is_debug;
+
     debug("process_file_in_zip: ".$file_path);
 
     $zip_file_path = "";
@@ -311,6 +333,27 @@ function is_in_rar($file_path, $ext) {
         } else {
             return true;
         }
+    }
+}
+
+################################################################################
+# Print list of file/dir
+################################################################################
+function print_list($dlist, $flist) {
+    // sort directory list
+    sort($dlist, SORT_NUMERIC);
+
+    // print directories
+    for ($i = 0 ; $i < count($dlist) ; $i++)
+        echo $dlist[$i]."\n";
+
+    // sort file list
+    if (count($flist) > 0) {
+        sort($flist, SORT_NUMERIC);
+
+        // print files
+        for ($i = 0 ; $i < count($flist) ; $i++)
+            echo $flist[$i]."\n";
     }
 }
 
