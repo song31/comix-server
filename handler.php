@@ -18,7 +18,7 @@ $parent_path = "/volume1";
 
 
 $is_debug = false;
-$source_encoding = "EUC-KR";
+$source_encoding = "CP949";
 $target_encoding = "UTF-8";
 $hidden_fullname = array(".", "..", "@eaDir", "Thumbs.db", ".DS_Store");
 $hidden_partname = array("__MACOSX");
@@ -367,13 +367,7 @@ function parse_real_path($path, $ext_with_dot) {
 function change_encoding($name) {
     global $source_encoding, $target_encoding;
 
-    # TODO
-    # To know the string is in the source encoding, 
-    # we try to change encoding from source to source
-    # and check whether the length has changed.
-    # Can we do better?
-    $tmp = iconv($source_encoding, $source_encoding, $name);
-    if (strlen($tmp) == strlen($name)) {
+    if (!mb_check_encoding($name, $target_encoding)) {
         return iconv($source_encoding, $target_encoding, $name);
     } else {
         return $name;
