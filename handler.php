@@ -14,7 +14,7 @@
 # You also need to change "manga" to "content" in AliasMatch
 # directive in httpd.conf-comix.
 ################################################################################
-$parent_path = "/volume1";
+$parent_path = "/volume";
 
 
 $is_debug = false;
@@ -68,9 +68,12 @@ function list_dir($dir_path) {
     debug("list_dir: ". $dir_path);
     if ($handle = opendir($dir_path)) {
         $dlist = array();
-        $filst = array();
+        $flist = array();
 
-        while (false !== ($file_name = readdir($handle))) {
+	while (false !== ($file_name = readdir($handle))) {
+            if ($file_name[0] == '.')
+                continue;
+
             $full_path = $dir_path."/".$file_name;
 
             if (is_support($file_name, is_dir($full_path)))
@@ -341,11 +344,13 @@ function is_in_rar($file_path, $ext) {
 ################################################################################
 function print_list($dlist, $flist) {
     // sort directory list
-    sort($dlist, SORT_NUMERIC);
+    if (count($dlist) > 0) {
+        sort($dlist, SORT_NUMERIC);
 
-    // print directories
-    for ($i = 0 ; $i < count($dlist) ; $i++)
-        echo $dlist[$i]."\n";
+        // print directories
+        for ($i = 0 ; $i < count($dlist) ; $i++)
+            echo $dlist[$i]."\n";
+    }
 
     // sort file list
     if (count($flist) > 0) {
