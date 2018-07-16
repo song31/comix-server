@@ -8,7 +8,7 @@ Listen 31257
   DirectoryIndex index.php
 
   AliasMatch ^/welcome.102(.*)$ /var/www/html/welcome.php
-  AliasMatch ^/manga(.*)$ /var/www/html/handler.php
+  AliasMatch ^/(.*)$ /var/www/html/handler.php
 
   ErrorLog ${APACHE_LOG_DIR}/error.log
   CustomLog ${APACHE_LOG_DIR}/access.log combined

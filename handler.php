@@ -36,7 +36,12 @@ debug("request_path: ".$request_path);
 $path = $parent_path.$request_path;
 debug("path: ".$path);
 
-if (is_dir($path)) {
+if (strpos($path, ".zip") !== false || strpos($path, ".rar") !== false)
+    $archive = 1;
+else
+    $archive = 0;
+
+if (!$archive && is_dir($path)) {
     list_dir($path);
 } else {
     $path_parts = pathinfo($path);
