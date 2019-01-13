@@ -210,7 +210,7 @@ function process_file_in_zip($file_path, $type) {
         $entry_size = zip_entry_filesize($entry);
 
         if ($entry_size > 0) {
-            if (end_with($entry_name, $image_path)) {
+            if (match_with($entry_name, $image_path)) {
                 if (zip_entry_open($zip_handle, $entry)) {
                     debug("found file in zip: ".$entry_name);
                     if (!$is_debug) {
@@ -219,6 +219,7 @@ function process_file_in_zip($file_path, $type) {
                         echo zip_entry_read($entry, $entry_size);
                     }
                 }
+                break;
             }
         }
     }
@@ -249,7 +250,7 @@ function process_file_in_rar($file_path, $type) {
         foreach ($rar_handle->getEntries() as $entry) {
             $entry_name = $entry->getName();
             $entry_name = change_encoding($entry_name);
-            if (end_with($entry_name, $image_path)) {
+            if (match_with($entry_name, $image_path)) {
                 debug("found file in rar: ".$entry_name);
                 $entry_size = $entry->getUnpackedSize();
                 $fp = $entry->getStream();
@@ -267,6 +268,7 @@ function process_file_in_rar($file_path, $type) {
                     }
                 }
                 fclose($fp);
+                break;
             }
         }
     } else {
@@ -386,6 +388,17 @@ function get_content_type($ext) {
 ################################################################################
 function get_file_extension($file_name) {
     return strtolower(substr(strrchr($file_name,'.'),1));
+}
+
+
+################################################################################
+# Return true if string metches with keyword
+################################################################################
+function match_with($haystack, $needle,$case=true) {
+	if($case)
+		return !strcmp($haystack, $needle);
+	else
+		return !strcasecmp($haystack, $needle);
 }
 
 ################################################################################
