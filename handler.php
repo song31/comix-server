@@ -14,11 +14,11 @@
 # You also need to change "manga" to "content" in AliasMatch
 # directive in httpd.conf-comix.
 ################################################################################
-$parent_path = "/volume1";
+$parent_path = "/volume";
 
 
 $is_debug = false;
-$source_encoding = "EUC-KR";
+$source_encoding = "CP949";
 $target_encoding = "UTF-8";
 $hidden_fullname = array(".", "..", "@eaDir", "Thumbs.db", ".DS_Store");
 $hidden_partname = array("__MACOSX");
@@ -36,7 +36,12 @@ debug("request_path: ".$request_path);
 $path = $parent_path.$request_path;
 debug("path: ".$path);
 
-if (is_dir($path)) {
+if (strpos($path, ".zip") !== false || strpos($path, ".rar") !== false)
+    $archive = 1;
+else
+    $archive = 0;
+
+if (!$archive && is_dir($path)) {
     list_dir($path);
 } else {
     $path_parts = pathinfo($path);
@@ -67,12 +72,27 @@ if (is_dir($path)) {
 function list_dir($dir_path) {
     debug("list_dir: ". $dir_path);
     if ($handle = opendir($dir_path)) {
-        while (false !== ($file = readdir($handle))) {
-            if (is_support($file)) {
-                echo "$file\n";
+        $dlist = array();
+        $flist = array();
+
+	while (false !== ($file_name = readdir($handle))) {
+            if ($file_name[0] == '.')
+                continue;
+
+            $full_path = $dir_path."/".$file_name;
+
+            if (is_support($file_name, is_dir($full_path)))
+            {
+                if (is_dir($full_path))
+                    $dlist[] = $file_name;
+                else
+                    $flist[] = $file_name;
             }
         }
         closedir($handle);
+
+        // print
+        print_list($dlist, $flist);
     }
     exit;
 }
@@ -101,6 +121,8 @@ function process_image($file_path, $type) {
 function process_zip($file_path) {
     debug("process_zip: ".$file_path);
 
+    $list = array();
+
     # to support aicromics, the new client app
     if (end_with($file_path, "/")) {
         $file_path = substr($file_path, 0, -1);
@@ -115,11 +137,14 @@ function process_zip($file_path) {
         $entry_name = change_encoding($entry_name);
         debug("entry_name: ".$entry_name);
         if (is_support($entry_name, false)) {
-            echo "$entry_name\n";
+            $list[] = "$entry_name";
             debug("");
         }
     }
     zip_close($zip_handle);
+
+    // print
+    print_list(array(), $list);
 }
 
 ################################################################################
@@ -127,6 +152,8 @@ function process_zip($file_path) {
 ################################################################################
 function process_rar($file_path) {
     debug("process_rar: ".$file_path);
+
+    $list = array();
 
     # to support aicromics, the new client app
     if (end_with($file_path, "/")) {
@@ -142,11 +169,14 @@ function process_rar($file_path) {
         $entry_name = $entries[$i]->getName();
         debug("entry_name: ".$entry_name);
         if (is_support($entry_name, false)) {
-            echo "$entry_name\n";
+            $list[] = "$entry_name";
             debug("");
         }
     }
     $arch->close();
+
+    // print
+    print_list(array(), $list);
 }
 
 ################################################################################
@@ -154,6 +184,7 @@ function process_rar($file_path) {
 ################################################################################
 function process_file_in_zip($file_path, $type) {
     global $is_debug;
+
     debug("process_file_in_zip: ".$file_path);
 
     $zip_file_path = "";
@@ -179,7 +210,7 @@ function process_file_in_zip($file_path, $type) {
         $entry_size = zip_entry_filesize($entry);
 
         if ($entry_size > 0) {
-            if (end_with($entry_name, $image_path)) {
+            if (match_with($entry_name, $image_path)) {
                 if (zip_entry_open($zip_handle, $entry)) {
                     debug("found file in zip: ".$entry_name);
                     if (!$is_debug) {
@@ -188,6 +219,7 @@ function process_file_in_zip($file_path, $type) {
                         echo zip_entry_read($entry, $entry_size);
                     }
                 }
+                break;
             }
         }
     }
@@ -218,7 +250,7 @@ function process_file_in_rar($file_path, $type) {
         foreach ($rar_handle->getEntries() as $entry) {
             $entry_name = $entry->getName();
             $entry_name = change_encoding($entry_name);
-            if (end_with($entry_name, $image_path)) {
+            if (match_with($entry_name, $image_path)) {
                 debug("found file in rar: ".$entry_name);
                 $entry_size = $entry->getUnpackedSize();
                 $fp = $entry->getStream();
@@ -236,6 +268,7 @@ function process_file_in_rar($file_path, $type) {
                     }
                 }
                 fclose($fp);
+                break;
             }
         }
     } else {
@@ -268,20 +301,15 @@ function is_support($file_name, $is_dir=true) {
             return false;
         }
     }
+
+    if ($is_dir)
+        return true;
+
     $ext =  get_file_extension($file_name);
-    if ($ext) {
-        if (in_array($ext, $allows)) {
-            return true;
-        } else {
-            return false;
-        }
-    } else {
-        if ($is_dir) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+    if ($ext && in_array($ext, $allows))
+        return true;
+    else
+        return false;
 }
 
 ################################################################################
@@ -319,6 +347,29 @@ function is_in_rar($file_path, $ext) {
 }
 
 ################################################################################
+# Print list of file/dir
+################################################################################
+function print_list($dlist, $flist) {
+    // sort directory list
+    if (count($dlist) > 0) {
+        sort($dlist, SORT_NUMERIC);
+
+        // print directories
+        for ($i = 0 ; $i < count($dlist) ; $i++)
+            echo $dlist[$i]."\n";
+    }
+
+    // sort file list
+    if (count($flist) > 0) {
+        sort($flist, SORT_NUMERIC);
+
+        // print files
+        for ($i = 0 ; $i < count($flist) ; $i++)
+            echo $flist[$i]."\n";
+    }
+}
+
+################################################################################
 # Return content type from file extension
 ################################################################################
 function get_content_type($ext) {
@@ -337,6 +388,17 @@ function get_content_type($ext) {
 ################################################################################
 function get_file_extension($file_name) {
     return strtolower(substr(strrchr($file_name,'.'),1));
+}
+
+
+################################################################################
+# Return true if string metches with keyword
+################################################################################
+function match_with($haystack, $needle,$case=true) {
+	if($case)
+		return !strcmp($haystack, $needle);
+	else
+		return !strcasecmp($haystack, $needle);
 }
 
 ################################################################################
@@ -371,13 +433,7 @@ function parse_real_path($path, $ext_with_dot) {
 function change_encoding($name) {
     global $source_encoding, $target_encoding;
 
-    # TODO
-    # To know the string is in the source encoding, 
-    # we try to change encoding from source to source
-    # and check whether the length has changed.
-    # Can we do better?
-    $tmp = iconv($source_encoding, $source_encoding, $name);
-    if (strlen($tmp) == strlen($name)) {
+    if (!mb_check_encoding($name, $target_encoding)) {
         return iconv($source_encoding, $target_encoding, $name);
     } else {
         return $name;

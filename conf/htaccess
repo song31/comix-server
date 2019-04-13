@@ -1,5 +1,5 @@
 AuthType Basic
 AuthName "AirComix"
-AuthUserFile /var/services/.htpasswd
+AuthUserFile /var/www/auth/.htpasswd
 require valid-user
 
